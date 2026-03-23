@@ -26,7 +26,7 @@ function buildSidebar(type, activePage) {
 
   return `
     <div class="sb-logo">
-      <div class="sb-logo-mark">
+      <a href="index.html" style="text-decoration:none"><div class="sb-logo-mark">
         <div class="logo-icon">
           <svg viewBox="0 0 22 22" fill="none"><path d="M3 6h16M3 11h10M3 16h13" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
         </div>
