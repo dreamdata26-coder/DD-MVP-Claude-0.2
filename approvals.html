@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dream Data — Approvals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <div class="topbar-title">Approvals</div>
+        <div class="topbar-sub">3 pending · 1 overdue · 28 approved this month</div>
+      </div>
+      <div class="topbar-spacer"></div>
+      <div class="topbar-actions">
+        <button class="btn btn-secondary btn-sm">Audit Log</button>
+      </div>
+    </header>
+    <div class="content">
+      <div style="margin-bottom:20px">
+        <div style="font-size:18px;font-weight:600;font-family:'DM Serif Display',serif;margin-bottom:4px">Pending Approvals</div>
+        <div style="font-size:13px;color:#6b7a8d">Items requiring your review and action</div>
+      </div>
+
+      <!-- BEO Approval -->
+      <div class="approval-card" id="ac1">
+        <div class="approval-head">
+          <div style="display:flex;gap:14px;flex:1">
+            <div class="approval-icon" style="background:var(--warning-lt)">
+              <svg width="17" height="17" viewBox="0 0 17 17" fill="none"><path d="M3 4h11M3 7.5h11M3 11h8" stroke="var(--warning)" stroke-width="1.4" stroke-linecap="round"/><rect x="1.5" y="2" width="14" height="13" rx="2" stroke="var(--warning)" stroke-width="1.3"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:600;margin-bottom:3px">BEO Approval — Meridian Tech Product Launch</div>
+              <div style="font-size:12.5px;color:#6b7a8d">BEO v2.0 · Submitted by Chris Santos (Catering) · 2 days ago</div>
+            </div>
+          </div>
+          <span class="badge badge-warning">BEO</span>
+        </div>
+        <div class="approval-meta">
+          <div class="approval-meta-item"><div class="aml">Event</div><div class="amv">Meridian Tech — Jun 22</div></div>
+          <div class="approval-meta-item"><div class="aml">Venue</div><div class="amv">Grand Salon</div></div>
+          <div class="approval-meta-item"><div class="aml">Guests</div><div class="amv">280 pax</div></div>
+          <div class="approval-meta-item"><div class="aml">F&B Total</div><div class="amv">$38,400</div></div>
+          <div class="approval-meta-item"><div class="aml">Version</div><div class="amv">v2.0 (revised)</div></div>
+        </div>
+        <div class="approval-actions">
+          <button class="btn btn-primary btn-sm" onclick="approve('ac1','BEO Approved')">Approve BEO</button>
+          <button class="btn btn-secondary btn-sm">Request Changes</button>
+          <a class="btn btn-ghost btn-sm" href="event-detail.html">View Full BEO →</a>
+          <span style="margin-left:auto;font-size:12px;color:#8d9bb0">Submitted 2 days ago · Event in 7 days</span>
+        </div>
+      </div>
+
+      <!-- Block Release -->
+      <div class="approval-card" id="ac2">
+        <div class="approval-head">
+          <div style="display:flex;gap:14px;flex:1">
+            <div class="approval-icon" style="background:var(--critical-lt)">
+              <svg width="17" height="17" viewBox="0 0 17 17" fill="none"><path d="M2.5 14V7.5L8.5 3.5l6 4V14" stroke="var(--critical)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:600;margin-bottom:3px">Room Block Release — Eastern Bank Leadership Summit</div>
+              <div style="font-size:12.5px;color:var(--critical);font-weight:500">12 rooms unreleased · Cutoff date passed Jun 11 · Submitted by Reservations</div>
+            </div>
+          </div>
+          <span class="badge badge-critical">Overdue</span>
+        </div>
+        <div class="approval-meta">
+          <div class="approval-meta-item"><div class="aml">Event</div><div class="amv">Eastern Bank — Jul 3–5</div></div>
+          <div class="approval-meta-item"><div class="aml">Block Held</div><div class="amv">60 rooms</div></div>
+          <div class="approval-meta-item"><div class="aml">Picked Up</div><div class="amv">48 rooms</div></div>
+          <div class="approval-meta-item"><div class="aml">To Release</div><div class="amv" style="color:var(--critical)">12 rooms</div></div>
+          <div class="approval-meta-item"><div class="aml">Cutoff Was</div><div class="amv" style="color:var(--critical)">Jun 11 (passed)</div></div>
+          <div class="approval-meta-item"><div class="aml">Revenue Risk</div><div class="amv">~$4,200</div></div>
+        </div>
+        <div class="approval-actions">
+          <button class="btn btn-primary btn-sm" onclick="approve('ac2','Block Release Approved')">Approve Release</button>
+          <button class="btn btn-secondary btn-sm">Hold Rooms</button>
+          <a class="btn btn-ghost btn-sm" href="event-detail.html">View Block →</a>
+          <span style="margin-left:auto;font-size:12px;color:var(--critical);font-weight:500">⚠ Cutoff passed 4 days ago</span>
+        </div>
+      </div>
+
+      <!-- Menu sign-off -->
+      <div class="approval-card" id="ac3">
+        <div class="approval-head">
+          <div style="display:flex;gap:14px;flex:1">
+            <div class="approval-icon" style="background:var(--slate-lt)">
+              <svg width="17" height="17" viewBox="0 0 17 17" fill="none"><circle cx="8.5" cy="8.5" r="7" stroke="var(--slate)" stroke-width="1.3"/><path d="M5.5 8.5l2.5 2.5 4-4.5" stroke="var(--slate)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div style="font-size:15px;font-weight:600;margin-bottom:3px">Menu Sign-Off — Chen &amp; Parker Wedding</div>
+              <div style="font-size:12.5px;color:#6b7a8d">Client submitted selections · Catering sign-off required before confirmation</div>
+            </div>
+          </div>
+          <span class="badge badge-slate">Menu</span>
+        </div>
+        <div class="approval-meta">
+          <div class="approval-meta-item"><div class="aml">Event</div><div class="amv">Chen & Parker — Jun 28</div></div>
+          <div class="approval-meta-item"><div class="aml">Guests</div><div class="amv">200 pax</div></div>
+          <div class="approval-meta-item"><div class="aml">Menu Type</div><div class="amv">3-course plated</div></div>
+          <div class="approval-meta-item"><div class="aml">F&B Total</div><div class="amv">$28,000</div></div>
+          <div class="approval-meta-item"><div class="aml">Special Diets</div><div class="amv">14 vegan · 6 GF</div></div>
+        </div>
+        <div class="approval-actions">
+          <button class="btn btn-primary btn-sm" onclick="approve('ac3','Menu Approved')">Approve Menu</button>
+          <button class="btn btn-secondary btn-sm">Request Changes</button>
+          <a class="btn btn-ghost btn-sm" href="event-detail.html">View Details →</a>
+          <span style="margin-left:auto;font-size:12px;color:#8d9bb0">Submitted today · Event in 13 days</span>
+        </div>
+      </div>
+
+      <!-- History -->
+      <div style="margin-top:28px">
+        <div style="font-size:14px;font-weight:600;margin-bottom:12px">Recently Approved</div>
+        <div class="card">
+          <table class="data-table">
+            <thead><tr><th>Item</th><th>Event</th><th>Approved By</th><th>Date</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr onclick="location.href='event-detail.html'"><td class="td-primary">BEO v3.1 — Harrington Retreat</td><td style="color:#6b7a8d;font-size:13px">Harrington — Jun 18</td><td style="color:#6b7a8d;font-size:13px">Jamie Mills</td><td style="color:#6b7a8d;font-size:13px">Jun 14</td><td><span class="badge badge-success">Approved</span></td></tr>
+              <tr onclick="location.href='event-detail.html'"><td class="td-primary">Menu — Harrington Retreat</td><td style="color:#6b7a8d;font-size:13px">Harrington — Jun 18</td><td style="color:#6b7a8d;font-size:13px">Chris Santos</td><td style="color:#6b7a8d;font-size:13px">Jun 1</td><td><span class="badge badge-success">Approved</span></td></tr>
+              <tr onclick="location.href='event-detail.html'"><td class="td-primary">Room block — Northgate Gala</td><td style="color:#6b7a8d;font-size:13px">Northgate — Jul 12</td><td style="color:#6b7a8d;font-size:13px">Jamie Mills</td><td style="color:#6b7a8d;font-size:13px">Jun 10</td><td><span class="badge badge-success">Approved</span></td></tr>
+              <tr onclick="location.href='event-detail.html'"><td class="td-primary">Budget increase — Meridian Tech</td><td style="color:#6b7a8d;font-size:13px">Meridian — Jun 22</td><td style="color:#6b7a8d;font-size:13px">Rebecca Walsh</td><td style="color:#6b7a8d;font-size:13px">Jun 8</td><td><span class="badge badge-success">Approved</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="shared.js"></script>
+<script>
+document.getElementById('sidebar').innerHTML = buildSidebar('hotel', 'alerts');
+function approve(id, label) {
+  const card = document.getElementById(id);
+  const actions = card.querySelector('.approval-actions');
+  actions.innerHTML = `<span style="color:var(--success);font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>${label}</span>`;
+  setTimeout(() => { card.style.transition='opacity .4s, transform .3s'; card.style.opacity='.35'; }, 800);
+}
+</script>
+</body>
+</html>

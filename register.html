@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dream Data — Register Your Hotel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+body { background: var(--graphite); }
+.ob-wrap { min-height: 100vh; display: flex; flex-direction: column; }
+
+/* Top bar */
+.ob-topbar {
+  padding: 20px 32px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.ob-logo { display: flex; align-items: center; gap: 10px; }
+.ob-logo-box { width: 34px; height: 34px; background: var(--bronze); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.ob-logo-box svg { width: 17px; height: 17px; }
+.ob-logo-name { font-family: 'DM Serif Display', serif; font-size: 15px; color: #f0f4f8; }
+
+/* Progress bar */
+.ob-progress { display: flex; align-items: center; gap: 0; }
+.ob-step {
+  display: flex; align-items: center; cursor: pointer;
+}
+.ob-step-circle {
+  width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(255,255,255,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,.4);
+  transition: all .2s; flex-shrink: 0;
+}
+.ob-step.done .ob-step-circle { background: var(--success); border-color: var(--success); color: var(--white); }
+.ob-step.active .ob-step-circle { background: var(--bronze); border-color: var(--bronze); color: var(--white); }
+.ob-step-label { font-size: 12px; color: rgba(255,255,255,.4); margin-left: 8px; white-space: nowrap; }
+.ob-step.active .ob-step-label { color: #f0f4f8; font-weight: 500; }
+.ob-step.done .ob-step-label { color: rgba(255,255,255,.6); }
+.ob-step-line { width: 40px; height: 1px; background: rgba(255,255,255,.12); margin: 0 8px; flex-shrink: 0; }
+.ob-step.done + .ob-step-line { background: var(--success); opacity: 0.4; }
+
+/* Content */
+.ob-content { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 40px 20px; }
+.ob-card {
+  background: var(--white); border-radius: 16px; width: 100%; max-width: 520px;
+  box-shadow: 0 24px 64px rgba(0,0,0,.3);
+  animation: obIn .5s cubic-bezier(.22,.68,0,1.2) both;
+}
+@keyframes obIn { from{opacity:0;transform:translateY(20px) scale(.97)} to{opacity:1;transform:none} }
+.ob-card-head { padding: 28px 32px 22px; }
+.ob-step-num { font-size: 11px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--bronze); margin-bottom: 6px; }
+.ob-card-title { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--graphite); margin-bottom: 5px; }
+.ob-card-sub { font-size: 13.5px; color: #6b7a8d; }
+.ob-card-body { padding: 0 32px 8px; }
+.ob-card-footer { padding: 18px 32px 28px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eef1f4; margin-top: 18px; }
+.ob-step-content { display: none; }
+.ob-step-content.active { display: block; }
+
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 12.5px; font-weight: 500; color: #3a4a5a; margin-bottom: 6px; }
+.form-input { width: 100%; padding: 10px 14px; border: 1px solid var(--softsteel); border-radius: var(--radius-sm); font-family: inherit; font-size: 14px; color: var(--graphite); background: var(--white); outline: none; transition: border-color .18s, box-shadow .18s; }
+.form-input:focus { border-color: var(--slate); box-shadow: 0 0 0 3px var(--slate-lt); }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-hint { font-size: 11.5px; color: #7a8d9e; margin-top: 5px; }
+
+/* Toggle */
+.toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #eef1f4; }
+.toggle-row:last-child { border-bottom: none; }
+.toggle-label { font-size: 13.5px; font-weight: 500; }
+.toggle-sub { font-size: 12px; color: #6b7a8d; margin-top: 2px; }
+.toggle-switch { width: 40px; height: 22px; background: var(--softsteel); border-radius: 11px; cursor: pointer; position: relative; transition: background .2s; flex-shrink: 0; }
+.toggle-switch.on { background: var(--slate); }
+.toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--white); transition: transform .2s; }
+.toggle-switch.on::after { transform: translateX(18px); }
+
+/* Invite row */
+.invite-row { display: flex; gap: 8px; margin-bottom: 8px; }
+
+/* Activation screen */
+.activation { text-align: center; padding: 32px; }
+.activation-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--success-lt); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+.activation-icon svg { width: 32px; height: 32px; color: var(--success); }
+.checklist { text-align: left; margin: 20px 0; }
+.cl-item { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid #eef1f4; font-size: 13.5px; }
+.cl-item:last-child { border-bottom: none; }
+.cl-done { color: var(--success); }
+.cl-pend { color: var(--softsteel); }
+</style>
+</head>
+<body>
+<div class="ob-wrap">
+
+  <div class="ob-topbar">
+    <div class="ob-logo">
+      <div class="ob-logo-box"><svg viewBox="0 0 22 22" fill="none"><path d="M3 6h16M3 11h10M3 16h13" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></div>
+      <span class="ob-logo-name">Dream Data</span>
+    </div>
+
+    <div class="ob-progress" id="progressBar">
+      <div class="ob-step active" onclick="goTo(1)">
+        <div class="ob-step-circle" id="sc1">1</div>
+        <div class="ob-step-label">Account</div>
+      </div>
+      <div class="ob-step-line"></div>
+      <div class="ob-step" onclick="goTo(2)">
+        <div class="ob-step-circle" id="sc2">2</div>
+        <div class="ob-step-label">Property</div>
+      </div>
+      <div class="ob-step-line"></div>
+      <div class="ob-step" onclick="goTo(3)">
+        <div class="ob-step-circle" id="sc3">3</div>
+        <div class="ob-step-label">Defaults</div>
+      </div>
+      <div class="ob-step-line"></div>
+      <div class="ob-step" onclick="goTo(4)">
+        <div class="ob-step-circle" id="sc4">4</div>
+        <div class="ob-step-label">Menus</div>
+      </div>
+      <div class="ob-step-line"></div>
+      <div class="ob-step" onclick="goTo(5)">
+        <div class="ob-step-circle" id="sc5">5</div>
+        <div class="ob-step-label">Team</div>
+      </div>
+      <div class="ob-step-line"></div>
+      <div class="ob-step" onclick="goTo(6)">
+        <div class="ob-step-circle" id="sc6">6</div>
+        <div class="ob-step-label">Launch</div>
+      </div>
+    </div>
+
+    <a href="login.html" style="font-size:13px;color:rgba(255,255,255,.4)">Already have an account?</a>
+  </div>
+
+  <div class="ob-content">
+    <div class="ob-card">
+
+      <!-- Step 1: Account Creation -->
+      <div class="ob-step-content active" id="step1">
+        <div class="ob-card-head">
+          <div class="ob-step-num">Step 1 of 6</div>
+          <div class="ob-card-title">Create your account</div>
+          <div class="ob-card-sub">Set up admin access for your property</div>
+        </div>
+        <div class="ob-card-body">
+          <div class="form-group"><label class="form-label">Hotel Name</label><input class="form-input" type="text" placeholder="Grand Meridian Hotel"></div>
+          <div class="form-group"><label class="form-label">Your Work Email</label><input class="form-input" type="email" placeholder="admin@grandmeridian.com"></div>
+          <div class="form-grid-2">
+            <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="••••••••"></div>
+            <div class="form-group"><label class="form-label">Confirm Password</label><input class="form-input" type="password" placeholder="••••••••"></div>
+          </div>
+          <div class="form-group" style="display:flex;align-items:flex-start;gap:10px;padding:12px;background:var(--cloud);border-radius:var(--radius-sm)">
+            <input type="checkbox" id="terms" style="width:14px;height:14px;margin-top:2px;flex-shrink:0">
+            <label for="terms" style="font-size:12.5px;color:#6b7a8d;line-height:1.5">I agree to the Dream Data <a href="#" style="color:var(--slate)">Terms of Service</a> and <a href="#" style="color:var(--slate)">Privacy Policy</a></label>
+          </div>
+        </div>
+        <div class="ob-card-footer">
+          <span style="font-size:12px;color:#8d9bb0">No credit card required</span>
+          <button class="btn btn-primary" onclick="goTo(2)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Property Profile -->
+      <div class="ob-step-content" id="step2">
+        <div class="ob-card-head">
+          <div class="ob-step-num">Step 2 of 6</div>
+          <div class="ob-card-title">Property profile</div>
+          <div class="ob-card-sub">Help us configure your workspace defaults</div>
+        </div>
+        <div class="ob-card-body">
+          <div class="form-group"><label class="form-label">Property Address</label><input class="form-input" type="text" placeholder="123 Grand Ave, New York, NY 10001"></div>
+          <div class="form-grid-2">
+            <div class="form-group"><label class="form-label">Number of Guest Rooms</label><input class="form-input" type="number" placeholder="0"></div>
+            <div class="form-group"><label class="form-label">Number of Meeting Rooms</label><input class="form-input" type="number" placeholder="0"></div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group"><label class="form-label">Default Tax %</label><input class="form-input" type="text" placeholder="8.875%"><div class="form-hint">Applied to all F&B items by default</div></div>
+            <div class="form-group"><label class="form-label">Default Service Charge %</label><input class="form-input" type="text" placeholder="22%"><div class="form-hint">Applied to all catering functions</div></div>
+          </div>
+        </div>
+        <div class="ob-card-footer">
+          <button class="btn btn-secondary" onclick="goTo(1)">← Back</button>
+          <button class="btn btn-primary" onclick="goTo(3)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Workflow Defaults -->
+      <div class="ob-step-content" id="step3">
+        <div class="ob-card-head">
+          <div class="ob-step-num">Step 3 of 6</div>
+          <div class="ob-card-title">Workflow defaults</div>
+          <div class="ob-card-sub">Set standard timelines for your events</div>
+        </div>
+        <div class="ob-card-body">
+          <div class="form-group"><label class="form-label">Default Room Block Cutoff (days before event)</label><input class="form-input" type="number" placeholder="14" value="14"></div>
+          <div class="form-group"><label class="form-label">Default F&B Selection Deadline (days before event)</label><input class="form-input" type="number" placeholder="21" value="21"></div>
+          <div class="form-group"><label class="form-label">Default Headcount Finalization (days before event)</label><input class="form-input" type="number" placeholder="5" value="5"></div>
+          <div style="padding: 14px; background:var(--cloud); border-radius:var(--radius-sm); margin-top:4px">
+            <div class="toggle-row">
+              <div><div class="toggle-label">Auto-alert at 70% room pickup</div><div class="toggle-sub">Notify EM when block reaches 70% pickup</div></div>
+              <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Cutoff reminders at 14 &amp; 7 days</div><div class="toggle-sub">Email alerts to EM and client</div></div>
+              <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+            </div>
+            <div class="toggle-row">
+              <div><div class="toggle-label">Pending approval reminders</div><div class="toggle-sub">Daily digest for unapproved BEOs</div></div>
+              <div class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+            </div>
+          </div>
+        </div>
+        <div class="ob-card-footer">
+          <button class="btn btn-secondary" onclick="goTo(2)">← Back</button>
+          <button class="btn btn-primary" onclick="goTo(4)">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Upload Menus -->
+      <div class="ob-step-content" id="step4">
+        <div class="ob-card-head">
+          <div class="ob-step-num">Step 4 of 6</div>
+          <div class="ob-card-title">Upload your menus</div>
+          <div class="ob-card-sub">Optional — you can add menus later</div>
+        </div>
+        <div class="ob-card-body">
+          <div style="border:2px dashed var(--softsteel);border-radius:var(--radius);padding:32px;text-align:center;cursor:pointer;transition:all .15s;margin-bottom:16px" onmouseenter="this.style.borderColor='var(--slate)'" onmouseleave="this.style.borderColor='var(--softsteel)'">
+            <svg viewBox="0 0 32 32" fill="none" width="32" height="32" style="margin:0 auto 10px"><path d="M16 4v18M8 10l8-8 8 8M6 28h20" stroke="var(--slate)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div style="font-size:14px;font-weight:500;margin-bottom:4px">Upload menu PDF</div>
+            <div style="font-size:12px;color:#8d9bb0">PDF up to 20MB · We'll help you structure it</div>
+          </div>
+          <div style="text-align:center;font-size:13px;color:#8d9bb0;margin-bottom:14px">or manually add menu categories</div>
+          <div class="form-group">
+            <label class="form-label">Category Name</label>
+            <div style="display:flex;gap:8px">
+              <input class="form-input" type="text" placeholder="e.g. Breakfast Buffets" style="flex:1">
+              <button class="btn btn-secondary">Add</button>
+            </div>
+          </div>
+        </div>
+        <div class="ob-card-footer">
+          <button class="btn btn-secondary" onclick="goTo(3)">← Back</button>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-secondary" onclick="goTo(5)">Skip for now</button>
+            <button class="btn btn-primary" onclick="goTo(5)">Continue →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5: Invite Team -->
+      <div class="ob-step-content" id="step5">
+        <div class="ob-card-head">
+          <div class="ob-step-num">Step 5 of 6</div>
+          <div class="ob-card-title">Invite your team</div>
+          <div class="ob-card-sub">Add hotel staff — they'll get an invite email</div>
+        </div>
+        <div class="ob-card-body">
+          <div id="inviteList">
+            <div class="invite-row">
+              <input class="form-input" type="email" placeholder="colleague@hotel.com" style="flex:1">
+              <select class="form-input" style="width:150px"><option>Sales</option><option>Conference Services</option><option>Catering</option><option>Finance</option><option>Hotel Admin</option></select>
+            </div>
+            <div class="invite-row">
+              <input class="form-input" type="email" placeholder="colleague@hotel.com" style="flex:1">
+              <select class="form-input" style="width:150px"><option>Conference Services</option><option>Sales</option><option>Catering</option><option>Finance</option><option>Hotel Admin</option></select>
+            </div>
+          </div>
+          <button class="btn btn-ghost" onclick="addInviteRow()" style="margin-top:4px">+ Add another</button>
+        </div>
+        <div class="ob-card-footer">
+          <button class="btn btn-secondary" onclick="goTo(4)">← Back</button>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-secondary" onclick="goTo(6)">Skip for now</button>
+            <button class="btn btn-primary" onclick="goTo(6)">Send Invites →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6: Activation -->
+      <div class="ob-step-content" id="step6">
+        <div class="ob-card-head" style="text-align:center;padding-bottom:12px">
+          <div class="ob-step-num" style="text-align:center">Setup Complete</div>
+          <div class="ob-card-title">You're all set! 🎉</div>
+          <div class="ob-card-sub">Grand Meridian Hotel is ready on Dream Data</div>
+        </div>
+        <div class="ob-card-body">
+          <div class="checklist">
+            <div style="font-size:12px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:#8d9bb0;margin-bottom:8px">Setup checklist</div>
+            <div class="cl-item"><svg class="cl-done" viewBox="0 0 16 16" fill="none" width="16" height="16"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Account created</div>
+            <div class="cl-item"><svg class="cl-done" viewBox="0 0 16 16" fill="none" width="16" height="16"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Property profile configured</div>
+            <div class="cl-item"><svg class="cl-done" viewBox="0 0 16 16" fill="none" width="16" height="16"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Workflow defaults set</div>
+            <div class="cl-item"><svg class="cl-pend" viewBox="0 0 16 16" fill="none" width="16" height="16"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.4"/></svg>Upload menus (optional)</div>
+            <div class="cl-item"><svg class="cl-done" viewBox="0 0 16 16" fill="none" width="16" height="16"><path d="M2 8l4 4 8-8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>Team invites sent</div>
+          </div>
+        </div>
+        <div class="ob-card-footer" style="flex-direction:column;gap:10px;align-items:stretch">
+          <a class="btn btn-primary" href="event-create.html" style="justify-content:center;padding:12px">
+            <svg viewBox="0 0 16 16" fill="none" width="14" height="14"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            Create Your First Event
+          </a>
+          <a class="btn btn-secondary" href="hotel-dashboard.html" style="justify-content:center">Go to Dashboard</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+let current = 1;
+const total = 6;
+
+function goTo(n) {
+  document.querySelectorAll('.ob-step-content').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  // Update circles
+  document.querySelectorAll('.ob-step').forEach((s, i) => {
+    const stepNum = i + 1;
+    const c = document.getElementById('sc' + stepNum);
+    s.classList.remove('active', 'done');
+    if (stepNum < n) { s.classList.add('done'); c.textContent = '✓'; }
+    else if (stepNum === n) { s.classList.add('active'); c.textContent = stepNum; }
+    else { c.textContent = stepNum; }
+  });
+  current = n;
+}
+
+function addInviteRow() {
+  const list = document.getElementById('inviteList');
+  const row = document.createElement('div');
+  row.className = 'invite-row';
+  row.innerHTML = '<input class="form-input" type="email" placeholder="colleague@hotel.com" style="flex:1"><select class="form-input" style="width:150px"><option>Sales</option><option>Conference Services</option><option>Catering</option><option>Finance</option><option>Hotel Admin</option></select>';
+  list.appendChild(row);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dream Data — Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --graphite:#1F2328; --slate:#3F5B73; --slate-dk:#2e4459; --slate-lt:#EBF0F5;
+  --bronze:#B08A57; --bronze-lt:#F5EFE6; --bronze-dk:#8e6d3e;
+  --softsteel:#D7DDE3; --cloud:#F7F9FB; --white:#FFFFFF;
+  --success:#3E8E62; --warning:#D99A2B; --critical:#C74B4B;
+  --r:12px; --rs:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:'DM Sans',sans-serif;background:var(--graphite);color:var(--graphite);min-height:100vh;display:flex}
+
+/* Split layout */
+.split{display:flex;min-height:100vh;width:100%}
+
+/* ── Brand panel ── */
+.brand{
+  width:50%;flex-shrink:0;
+  background:var(--graphite);
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:52px 56px;
+}
+/* Subtle ambient gradient */
+.brand::before{
+  content:'';position:absolute;
+  top:-120px;right:-120px;width:500px;height:500px;
+  background:radial-gradient(circle,rgba(176,138,87,.12) 0%,transparent 65%);
+  pointer-events:none;animation:drift 14s ease-in-out infinite alternate;
+}
+.brand::after{
+  content:'';position:absolute;
+  bottom:-80px;left:-60px;width:360px;height:360px;
+  background:radial-gradient(circle,rgba(63,91,115,.10) 0%,transparent 65%);
+  pointer-events:none;animation:drift2 18s ease-in-out infinite alternate;
+}
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(20px,-15px) scale(1.04)}}
+@keyframes drift2{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-12px,18px) scale(1.03)}}
+
+.brand-top{position:relative;z-index:1}
+.brand-logo{display:flex;align-items:center;gap:12px;margin-bottom:72px}
+.logo-box{
+  width:42px;height:42px;background:var(--bronze);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+}
+.logo-box svg{width:22px;height:22px}
+.logo-name{font-family:'DM Serif Display',serif;font-size:18px;color:#f0f4f8;letter-spacing:0.3px}
+
+.brand-headline{
+  font-family:'DM Serif Display',serif;
+  font-size:38px;line-height:1.22;color:#f0f4f8;
+  margin-bottom:20px;letter-spacing:-0.3px;
+}
+.brand-headline em{color:var(--bronze);font-style:italic}
+.brand-desc{font-size:15px;color:#8d9bb0;line-height:1.65;margin-bottom:48px;max-width:380px}
+
+.feature-list{display:flex;flex-direction:column;gap:16px}
+.feat-row{display:flex;align-items:flex-start;gap:14px}
+.feat-icon{
+  width:32px;height:32px;border-radius:var(--rs);
+  background:rgba(176,138,87,.14);border:1px solid rgba(176,138,87,.2);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;
+}
+.feat-icon svg{width:14px;height:14px;color:var(--bronze)}
+.feat-title{font-size:13.5px;font-weight:600;color:#d0d9e4;line-height:1.35}
+.feat-sub{font-size:12px;color:#6b7a8d;margin-top:2px}
+
+.brand-bottom{position:relative;z-index:1}
+.stats-row{display:flex;gap:32px}
+.stat-item{}
+.stat-val{font-size:22px;font-weight:300;color:var(--bronze);letter-spacing:-0.3px}
+.stat-lab{font-size:11px;color:#6b7a8d;margin-top:2px;letter-spacing:0.3px}
+
+/* ── Form panel ── */
+.form-panel{
+  flex:1;background:var(--cloud);
+  display:flex;align-items:center;justify-content:center;
+  padding:40px 20px;
+}
+.form-box{width:100%;max-width:420px}
+
+/* Animated entrance */
+.form-box{
+  animation:cardIn .7s cubic-bezier(.22,.68,0,1.2) both;
+  animation-delay:.25s;opacity:0;
+}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(18px) scale(.98)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+.form-header{margin-bottom:28px}
+.form-title{font-family:'DM Serif Display',serif;font-size:26px;color:var(--graphite);margin-bottom:5px}
+.form-sub{font-size:13.5px;color:#6b7a8d}
+
+/* Role toggle */
+.role-toggle{display:flex;background:var(--softsteel);border-radius:10px;padding:4px;margin-bottom:28px}
+.role-btn{
+  flex:1;padding:9px;border-radius:7px;border:none;
+  background:transparent;font-family:inherit;font-size:13px;font-weight:500;
+  color:#6b7a8d;cursor:pointer;transition:all .2s;text-align:center;
+}
+.role-btn.active{background:var(--white);color:var(--graphite);box-shadow:0 1px 4px rgba(0,0,0,.10)}
+
+.form-group{margin-bottom:16px}
+label{display:block;font-size:12.5px;font-weight:500;color:#3a4a5a;margin-bottom:6px}
+.form-input{
+  width:100%;padding:11px 14px;
+  border:1px solid var(--softsteel);border-radius:var(--rs);
+  font-family:inherit;font-size:14px;color:var(--graphite);
+  background:var(--white);outline:none;
+  transition:border-color .18s,box-shadow .18s;
+}
+.form-input:focus{border-color:var(--slate);box-shadow:0 0 0 3px var(--slate-lt)}
+.form-input::placeholder{color:#9aabb9}
+.form-row-split{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.forgot{font-size:12.5px;color:var(--slate);font-weight:500;cursor:pointer}
+.forgot:hover{text-decoration:underline}
+
+.btn-submit{
+  width:100%;padding:12px;
+  background:var(--slate);color:var(--white);border:none;
+  border-radius:var(--rs);font-family:inherit;font-size:14px;font-weight:600;
+  cursor:pointer;transition:all .18s;margin-top:6px;
+  box-shadow:0 2px 8px rgba(63,91,115,.3);
+  position:relative;overflow:hidden;
+}
+.btn-submit:hover{background:var(--slate-dk);box-shadow:0 4px 14px rgba(63,91,115,.35)}
+.btn-submit:active{transform:scale(.99)}
+
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:#9aabb9;font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--softsteel)}
+
+.sso-btn{
+  width:100%;padding:10px;background:var(--white);color:#3a4a5a;
+  border:1px solid var(--softsteel);border-radius:var(--rs);
+  font-family:inherit;font-size:13px;font-weight:500;cursor:pointer;
+  transition:all .15s;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.sso-btn:hover{background:var(--cloud);border-color:#b0bcc8}
+
+.form-footer{margin-top:24px;text-align:center;font-size:13px;color:#6b7a8d}
+.form-footer a{color:var(--slate);font-weight:500;cursor:pointer}
+.form-footer a:hover{text-decoration:underline}
+
+.client-note{
+  background:var(--bronze-lt);border:1px solid rgba(176,138,87,.3);
+  border-radius:var(--rs);padding:12px 16px;margin-bottom:18px;
+  display:flex;gap:8px;align-items:flex-start;font-size:13px;color:#6b4a1a;
+}
+.client-note svg{width:15px;height:15px;color:var(--bronze);flex-shrink:0;margin-top:1px}
+</style>
+</head>
+<body>
+<div class="split">
+
+  <!-- Brand Panel -->
+  <div class="brand">
+    <div class="brand-top">
+      <div class="brand-logo">
+        <div class="logo-box">
+          <svg viewBox="0 0 22 22" fill="none">
+            <path d="M3 6h16M3 11h10M3 16h13" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <span class="logo-name">Dream Data</span>
+      </div>
+
+      <div class="brand-headline">
+        Room Block &amp; Event<br>
+        Intelligence —<br>
+        <em>Simplified.</em>
+      </div>
+      <div class="brand-desc">
+        One shared workspace for hotel teams and planners to manage everything that happens after a group event is booked.
+      </div>
+
+      <div class="feature-list">
+        <div class="feat-row">
+          <div class="feat-icon">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="1.5" y="2.5" width="13" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M5 1v3M11 1v3M1.5 7h13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          </div>
+          <div><div class="feat-title">Event Lifecycle Management</div><div class="feat-sub">Full execution from contract through checkout</div></div>
+        </div>
+        <div class="feat-row">
+          <div class="feat-icon">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M2 12V6l6-4 6 4v6l-6 3-6-3z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          </div>
+          <div><div class="feat-title">Room Block Visibility</div><div class="feat-sub">Track pickup, cutoffs, and risk in real time</div></div>
+        </div>
+        <div class="feat-row">
+          <div class="feat-icon">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M4 8l2.5 2.5L12 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/></svg>
+          </div>
+          <div><div class="feat-title">BEO &amp; Approval Workflow</div><div class="feat-sub">Streamlined sign-offs across all departments</div></div>
+        </div>
+        <div class="feat-row">
+          <div class="feat-icon">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M2 11l3.5-4 3 3 3.5-5 3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div><div class="feat-title">Client Portal Experience</div><div class="feat-sub">Premium, branded planner dashboard per property</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand-bottom">
+      <div class="stats-row">
+        <div class="stat-item"><div class="stat-val">93%</div><div class="stat-lab">Fewer missed deadlines</div></div>
+        <div class="stat-item"><div class="stat-val">8.2h</div><div class="stat-lab">Saved per event</div></div>
+        <div class="stat-item"><div class="stat-val">$127K</div><div class="stat-lab">Avg. revenue tracked</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Panel -->
+  <div class="form-panel">
+    <div class="form-box">
+      <div class="form-header">
+        <div class="form-title">Welcome back</div>
+        <div class="form-sub">Sign in to your Dream Data workspace</div>
+      </div>
+
+      <!-- Role toggle -->
+      <div class="role-toggle" id="roleToggle">
+        <button class="role-btn active" onclick="setRole('hotel',this)">Hotel Staff</button>
+        <button class="role-btn" onclick="setRole('client',this)">Client / Planner</button>
+      </div>
+
+      <!-- Client note (hidden by default) -->
+      <div class="client-note" id="clientNote" style="display:none">
+        <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v3M8 9.5v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        <span>You'll be directed to your event portal after signing in. Access is limited to your booked event.</span>
+      </div>
+
+      <div class="form-group">
+        <label>Email address</label>
+        <input class="form-input" type="email" placeholder="you@grandhotel.com" id="emailInput">
+      </div>
+      <div class="form-group">
+        <div class="form-row-split">
+          <label style="margin:0">Password</label>
+          <span class="forgot">Forgot password?</span>
+        </div>
+        <input class="form-input" type="password" placeholder="••••••••">
+      </div>
+
+      <button class="btn-submit" id="signInBtn" onclick="handleSignIn()">Sign In</button>
+
+      <div class="divider">or</div>
+
+      <button class="sso-btn">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M15.545 6.558a9.42 9.42 0 01.139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 118 0a7.652 7.652 0 015.376 2.168l-2.185 2.185C9.825 3.121 8.985 2.8 8 2.8c-2.309 0-4.2 1.891-4.2 4.2s1.891 4.2 4.2 4.2c2.125 0 3.676-1.05 4.114-2.8H8V6.558h7.545z" fill="#5F6368"/></svg>
+        Continue with Google
+      </button>
+
+      <div class="form-footer" id="formFooter">
+        New property? <a href="register.html">Register your hotel →</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let role = 'hotel';
+function setRole(r, btn) {
+  role = r;
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const note = document.getElementById('clientNote');
+  const footer = document.getElementById('formFooter');
+  const emailInput = document.getElementById('emailInput');
+  if (r === 'client') {
+    note.style.display = 'flex';
+    emailInput.placeholder = 'yourname@company.com';
+    footer.innerHTML = 'Have a hotel account? <a onclick="setRole(\'hotel\', document.querySelectorAll(\'.role-btn\')[0])">Switch to Hotel Staff →</a>';
+  } else {
+    note.style.display = 'none';
+    emailInput.placeholder = 'you@grandhotel.com';
+    footer.innerHTML = 'New property? <a href="register.html">Register your hotel →</a>';
+  }
+}
+function handleSignIn() {
+  const btn = document.getElementById('signInBtn');
+  btn.textContent = 'Signing in…';
+  btn.style.opacity = '0.8';
+  setTimeout(() => {
+    window.location.href = role === 'client' ? 'client-dashboard.html' : 'hotel-dashboard.html';
+  }, 900);
+}
+</script>
+</body>
+</html>
